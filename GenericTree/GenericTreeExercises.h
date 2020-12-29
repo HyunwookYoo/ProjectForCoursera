@@ -97,7 +97,11 @@ static void treeFactory(GenericTree<int>& tree) {
   // when you print it out. The main() function runs that test for you.
 
   // ...
-
+	tree.clear();
+	tree.createRoot(4);
+	
+	tree.getRootPtr()->addChild(8)->addChild(16)->addChild(42)->parentPtr->parentPtr->addChild(23)->parentPtr->parentPtr->addChild(15);
+	
 }
 
 // treeFactoryTest: This function demonstrates the execution of treeFactory
@@ -325,6 +329,21 @@ std::vector<T> traverseLevels(GenericTree<T>& tree) {
   // with the .push_back() member function.
 
   // ...
+	std::queue<TreeNode*> nodeToTraverse;
+	nodeToTraverse.push(rootNodePtr);
+	
+	while (!nodeToTraverse.empty())
+	{
+		TreeNode* node = nodeToTraverse.front();
+		nodeToTraverse.pop();
+		
+		for (auto childPtr : node->childrenPtrs)
+		{
+			nodeToTraverse.push(childPtr);
+		}
+		
+		results.push_back(node->data);
+	}
 
   return results;
 }
