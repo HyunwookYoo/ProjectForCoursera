@@ -53,6 +53,13 @@ int GridGraph::countEdges() const {
   // TODO: Your code here!
   // =======================================================================
 
+	for (const auto& x : adjacencyMap)
+	{
+		numEdges += x.second.size();
+	}
+	
+	numEdges /= 2;
+	
   return numEdges;
 }
 
@@ -88,6 +95,8 @@ void GridGraph::removePoint(const IntPair& p1) {
   // of small pieces of data like this.)
 
   const GridGraph::NeighborSet originalNeighbors = adjacencyMap.at(p1);
+	
+	originalNeighbors.erase(originalNeighbors.begin(), originalNeighbors.end());
 
   // =======================================================================
   // TODO: Your code here!
@@ -101,6 +110,8 @@ void GridGraph::removePoint(const IntPair& p1) {
   // =======================================================================
   // TODO: Your code here!
   // =======================================================================
+
+	
 }
 
 // =========================================================================
