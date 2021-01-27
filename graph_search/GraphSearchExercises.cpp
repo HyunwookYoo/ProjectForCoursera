@@ -96,12 +96,16 @@ void GridGraph::removePoint(const IntPair& p1) {
 
   const GridGraph::NeighborSet originalNeighbors = adjacencyMap.at(p1);
 	
-	originalNeighbors.erase(originalNeighbors.begin(), originalNeighbors.end());
-
+	
   // =======================================================================
   // TODO: Your code here!
   // =======================================================================
 
+	for (const auto& x : adjacencyMap)
+	{
+		removeEdge(p1, x.first);
+	}
+	
   // Finally, for the one point we are removing, erase the point key itself
   // from adjacencyMap directly. (There is no other GridGraph helper function
   // for this, because that's what we're implementing right now! We need to
@@ -110,8 +114,8 @@ void GridGraph::removePoint(const IntPair& p1) {
   // =======================================================================
   // TODO: Your code here!
   // =======================================================================
+	adjacencyMap.erase(p1);
 
-	
 }
 
 // =========================================================================
@@ -308,14 +312,16 @@ std::list<IntPair> graphBFS(const IntPair& start, const IntPair& goal, const Gri
     // Get a copy of the set of neighbors we're going to loop over.
     GridGraph::NeighborSet neighbors; // Change this...
     // =====================================================================
-
+	  neighbors = graph.adjacencyMap.at(curPoint);
+	  
     for (auto neighbor : neighbors) {
 
       // ==================================================================
       // TODO: Your code here!
       // Check whether the neighbor has already been visited.
-      bool neighborWasAlreadyVisited = false; // Change this...
+      bool neighborWasAlreadyVisited = visitedSet.count(neighbor); // Change this...
       // ==================================================================
+		
 
       // If this adjacent vertex has NOT been visited before, we will visit it now.
       // If it HAS been visited before, we do nothing and continue to loop.
@@ -329,12 +335,14 @@ std::list<IntPair> graphBFS(const IntPair& start, const IntPair& goal, const Gri
         // since curPoint has just led to the discovery of this neighbor for
         // the first time.
         // ...
-
+		pred[neighbor] = curPoint;
+		  
         // Add neighbor to the visited set.
         // ...
-
+		visitedSet.insert(neighbor);
         // Push neighbor into the exploration queue.
         // ...
+		exploreQ.push(neighbor);
 
         // ================================================================
 
@@ -522,7 +530,7 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
     // We'll need to loop over the neighbors that are the points adjacent to curState.
     // We need a collection of neighbors we're going to loop over.
     
-    auto neighbors = {start}; // Change this! This line is totally wrong.
+    auto neighbors {curState.getAdjacentStates()}; // Change this! This line is totally wrong.
 
     // Hint: Look at PuzzleState.h
     // =====================================================================
@@ -532,7 +540,7 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
       // ==================================================================
       // TODO: Your code here!
       // Check whether the neighbor has already been visited.
-      bool neighborWasAlreadyVisited = false; // Change this...
+      bool neighborWasAlreadyVisited = visitedSet.count(neighbor); // Change this...
       // ==================================================================
 
       if (!neighborWasAlreadyVisited) {
@@ -544,12 +552,14 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
         // since curState has just led to the discovery of this neighbor for
         // the first time.
         // ...
+		  pred[neighbor] = curState;
 
         // Add neighbor to the visited set.
         // ...
-
+		  visitedSet.insert(neighbor);
         // Push neighbor into the exploration queue.
         // ...
+		  exploreQ.push(neighbor);
 
         // ================================================================
 
